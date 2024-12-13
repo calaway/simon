@@ -29,18 +29,15 @@ pixel.brightness = 0.5
 # it debounces and sends as one key press. We set to false b/c pin goes low when pressed
 # Set PULL to true b/c we dont have external resistor, so pin held high when not pressed
 RedButton = keypad.Keys((board.TX,), value_when_pressed=False, pull=True)
+RedButton.events.clear()
 YellowButton = keypad.Keys((board.RX,), value_when_pressed=False, pull=True)
+YellowButton.events.clear()
 GreenButton = keypad.Keys((board.D25,), value_when_pressed=False, pull=True)
+GreenButton.events.clear()
 BlueButton = keypad.Keys((board.D24,), value_when_pressed=False, pull=True)
-
-# Add a button for mode switching
+BlueButton.events.clear()
 ModeButton = keypad.Keys((board.D13,), value_when_pressed=False, pull=True)
-
-# Check if the ModeButton is pressed right after initialization
-# I don't know why but this ensures it starts in mode 1
-# without this it goes to mode 2 immediately? WEIRD
-if ModeButton.events.get().pressed:
-    print("ModeButton is pressed immediately after initialization")
+ModeButton.events.clear()
 
 # Setup up LED output pins
 RedLED = digitalio.DigitalInOut(board.D5)
