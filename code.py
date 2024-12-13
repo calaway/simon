@@ -80,7 +80,7 @@ loseWav = audiocore.WaveFile(loseSound)
 audio = audiopwmio.PWMAudioOut(board.A0)
 
 # Define the buttons and LEDs in a list for easy access
-buttons = [RedButton, YellowButton, GreenButton, BlueButton]
+buttons = [RedButton, YellowButton, GreenButton, BlueButton, ModeButton]
 leds = [RedLED, YellowLED, GreenLED, BlueLED]
 sounds = [redWav, yellowWav, greenWav, blueWav]
 packets = ["R", "Y", "G", "B"]
@@ -170,11 +170,13 @@ def ControllerMode():
 
 # THIS IS SIMON GAME MODE
 def SimonGame():
+    print("Entering Simon game mode")
     # Initialize the delay time and round counter
     playback_delay_time = 0.5
     player_delay_time = 0.3
     round_counter = 0
 
+    exit_game = False
     while True:  # Outer loop to restart the game
          # play all 4 colors, their sound, and light the traffic light to start the game
         YellowLED.value = True
@@ -236,7 +238,10 @@ def SimonGame():
                         button_event = button.events.get()  # Get the button press event
                         if button_event and button_event.pressed:  # Button is pressed
                             button_pressed = True
-                            if i != color:  # Player pressed the wrong button
+                            if button == ModeButton:  # Player pressed the mode button
+                                print("Mode button pressed")
+                                exit_game = True
+                            elif i != color:  # Player pressed the wrong button
                                 game_over = True
                             else:
                                 # leds[i].value = True  # Light up the LED when the button is pressed
@@ -249,8 +254,15 @@ def SimonGame():
                                 #     pass
                                 # leds[i].value = False  # Turn off the LED when the button is released
                             break
+                if exit_game:
+                    print("Exiting game sequence")
+                    break
                 if game_over:
                     break
+
+            if exit_game:
+                print("Exiting round")
+                break
 
             # Add a delay after the user inputs the correct sequence
             if not game_over:
@@ -258,6 +270,10 @@ def SimonGame():
                 round_counter += 1
                 if round_counter % 2 == 0:  # After every 2 rounds
                     playback_delay_time *= 0.8  # Decrease the delay time by 20%
+
+        if exit_game:
+            print("Exiting Simon game mode")
+            break
 
         # Game over, play LOSE sound and flash all LEDs
         audio.play(loseWav)  # Play the LOSE sound
