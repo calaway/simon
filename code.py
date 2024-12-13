@@ -295,10 +295,7 @@ def SimonGame():
 
 while True:
     # Run the function for the current mode
-    if modes[current_mode] == "ControllerMode":
-        ControllerMode()
-    elif modes[current_mode] == "SimonGame":
-        SimonGame()
+    locals()[modes[current_mode]]()
 
     # Switch to the next mode
     current_mode = (current_mode + 1) % len(modes)
