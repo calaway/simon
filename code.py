@@ -104,6 +104,10 @@ print(f"Starting in {modes[current_mode]}")
 # Define a function for each mode
 # THIS IS STANDARD CONTROLLER MODE
 def ControllerMode():
+    print("Entering controller mode")
+    audio.play(contWav)
+    while audio.playing:
+        pass
     while True:
         # Check for button presses. If pressed, send a packet, set NeoPixel Color,
         # turn on the SIMON LED, Play a sound.
@@ -275,11 +279,6 @@ def SimonGame():
 
         # Delay before restarting the game
         time.sleep(3)
-
-# Play the Controller Mode sound file at startup
-audio.play(contWav)
-while audio.playing:
-    pass
 
 while True:
     # Run the function for the current mode
