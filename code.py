@@ -229,8 +229,9 @@ def SimonGame():
             # Get the player's response
             for color in game_sequence:
                 button_pressed = False
+                for button in buttons:
+                    button.events.clear()
                 while not button_pressed:
-                    # for i, (button, packet) in enumerate(zip(buttons, packets)):
                     for i, button in enumerate(buttons):
                         button_event = button.events.get()  # Get the button press event
                         if button_event and button_event.pressed:  # Button is pressed
