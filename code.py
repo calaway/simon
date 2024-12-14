@@ -29,18 +29,15 @@ pixel.brightness = 0.5
 # it debounces and sends as one key press. We set to false b/c pin goes low when pressed
 # Set PULL to true b/c we dont have external resistor, so pin held high when not pressed
 RedButton = keypad.Keys((board.TX,), value_when_pressed=False, pull=True)
+RedButton.events.clear()
 YellowButton = keypad.Keys((board.RX,), value_when_pressed=False, pull=True)
+YellowButton.events.clear()
 GreenButton = keypad.Keys((board.D25,), value_when_pressed=False, pull=True)
+GreenButton.events.clear()
 BlueButton = keypad.Keys((board.D24,), value_when_pressed=False, pull=True)
-
-# Add a button for mode switching
+BlueButton.events.clear()
 ModeButton = keypad.Keys((board.D13,), value_when_pressed=False, pull=True)
-
-# Check if the ModeButton is pressed right after initialization
-# I don't know why but this ensures it starts in mode 1
-# without this it goes to mode 2 immediately? WEIRD
-if ModeButton.events.get().pressed:
-    print("ModeButton is pressed immediately after initialization")
+ModeButton.events.clear()
 
 # Setup up LED output pins
 RedLED = digitalio.DigitalInOut(board.D5)
@@ -53,17 +50,17 @@ BlueLED = digitalio.DigitalInOut(board.D10)
 BlueLED.direction = digitalio.Direction.OUTPUT
 
 # Setup Sounds
-# meow = open("meow1.wav", "rb")
-# bark = open("bark1.wav", "rb")
-fart = open("fart1.wav", "rb")
-# blip = open("blip.wav", "rb")
-cont = open("controller.wav", "rb")
-sim = open("simonMode.wav", "rb")
-redSound = open("Red_252.wav", "rb")
-yellowSound = open("Yellow_310.wav", "rb")
-greenSound = open("Green_209.wav", "rb")
-blueSound = open("Blue_415.wav", "rb")
-loseSound = open("lose_42.wav", "rb")
+# meow = open("sounds/meow1.wav", "rb")
+# bark = open("sounds/bark1.wav", "rb")
+fart = open("sounds/fart1.wav", "rb")
+# blip = open("sounds/blip.wav", "rb")
+cont = open("sounds/controller.wav", "rb")
+sim = open("sounds/simonMode.wav", "rb")
+redSound = open("sounds/Red_252.wav", "rb")
+yellowSound = open("sounds/Yellow_310.wav", "rb")
+greenSound = open("sounds/Green_209.wav", "rb")
+blueSound = open("sounds/Blue_415.wav", "rb")
+loseSound = open("sounds/lose_42.wav", "rb")
 
 # meowWav = audiocore.WaveFile(meow)
 # barkWav = audiocore.WaveFile(bark)
@@ -298,10 +295,7 @@ def SimonGame():
 
 while True:
     # Run the function for the current mode
-    if modes[current_mode] == "ControllerMode":
-        ControllerMode()
-    elif modes[current_mode] == "SimonGame":
-        SimonGame()
+    locals()[modes[current_mode]]()
 
     # Switch to the next mode
     current_mode = (current_mode + 1) % len(modes)
